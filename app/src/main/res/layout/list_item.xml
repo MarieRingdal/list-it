@@ -14,7 +14,7 @@
     android:paddingTop="8dp"
     android:focusable="true">
 
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
@@ -23,25 +23,37 @@
             android:id="@+id/listTitle"
             android:layout_width="300dp"
             android:layout_height="wrap_content"
-            android:textSize="15sp"
-            android:fontFamily="sans-serif-black"
-            android:layout_marginTop="25dp"
             android:layout_marginLeft="16dp"
+            android:layout_marginTop="25dp"
             android:layout_marginRight="16dp"
-            app:layout_constraintBottom_toTopOf="@id/listProgression"
-            app:layout_constraintTop_toTopOf="parent"
-            android:text="HER ER DET TEKST"/>
+            android:fontFamily="sans-serif-black"
+            android:textSize="17sp" />
 
         <ProgressBar
             android:id="@+id/listProgression"
             style="@style/Widget.AppCompat.ProgressBar.Horizontal"
             android:layout_width="300dp"
             android:layout_height="wrap_content"
-            android:max="100"
-            android:layout_marginRight="16dp"
+            android:layout_alignParentBottom="true"
             android:layout_marginLeft="16dp"
-            />
+            android:layout_marginRight="16dp"
+            android:layout_marginBottom="25dp"
+            android:max="100"
+            android:progressBackgroundTint="@color/burgundy" />
 
-    </LinearLayout>
+        <ImageButton
+            android:id="@+id/deleteListButton"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentEnd="true"
+            android:layout_marginTop="35dp"
+            android:layout_marginEnd="15dp"
+            android:layout_toEndOf="@+id/listProgression"
+            android:background="#F2F2F2F2"
+            android:src="@drawable/ic_delete" />
+
+
+    </RelativeLayout>
 
 </androidx.cardview.widget.CardView>
