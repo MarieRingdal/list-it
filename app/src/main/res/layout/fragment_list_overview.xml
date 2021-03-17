@@ -13,14 +13,14 @@
         android:layout_height="150dp"
         android:fitsSystemWindows="true"
         android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
-        android:background="#D4A29C">
+        android:background="@color/terracotta">
 
         <com.google.android.material.appbar.CollapsingToolbarLayout
             android:id="@+id/collapsingToolbar"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:fitsSystemWindows="true"
-            app:contentScrim="#D4A29C"
+            app:contentScrim="@color/terracotta"
             app:expandedTitleMarginBottom="64dp"
             app:expandedTitleMarginStart="48dp"
             app:layout_scrollFlags="scroll|exitUntilCollapsed"
@@ -46,7 +46,7 @@
                 android:layout_height="?attr/actionBarSize"
                 app:layout_collapseMode="pin"
                 app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
-                android:background="#D4A29C" />
+                android:background="@color/terracotta" />
 
         </com.google.android.material.appbar.CollapsingToolbarLayout>
 
@@ -84,7 +84,7 @@
             android:layout_gravity="bottom|end"
             android:layout_margin="16dp"
             android:src="@drawable/ic_add"
-            android:backgroundTint="#D4A29C"
+            android:backgroundTint="@color/terracotta"
             android:contentDescription="@string/adds_new_list" />
 
     </androidx.coordinatorlayout.widget.CoordinatorLayout>

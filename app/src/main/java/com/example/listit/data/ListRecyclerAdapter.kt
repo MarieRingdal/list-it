@@ -1,16 +1,21 @@
 package com.example.listit.data
 
 import android.app.AlertDialog
+import android.content.Intent
+import android.text.Layout
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.*
+import androidx.cardview.widget.CardView
+import androidx.fragment.app.FragmentTransaction
 import androidx.recyclerview.widget.RecyclerView
 import com.example.listit.R
+import com.example.listit.ToDoOverviewFragment
 import com.example.listit.databinding.ListItemBinding
 
-class ListOverviewRecyclerAdapter(private val lists:MutableList<List>) :
-    RecyclerView.Adapter<ListOverviewRecyclerAdapter.ListViewHolder>(){
+class ListRecyclerAdapter(private val lists:MutableList<List>) :
+    RecyclerView.Adapter<ListRecyclerAdapter.ListViewHolder>(){
 
     private val TAG:String = "listit.ListOverviewRecyclerAdapter.kt"
 
@@ -56,7 +61,9 @@ class ListOverviewRecyclerAdapter(private val lists:MutableList<List>) :
     override fun getItemCount(): Int = lists.size
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ListViewHolder {
-        return ListViewHolder(ListItemBinding.inflate(LayoutInflater.from(parent.context), parent, false))
+
+        return ListViewHolder(ListItemBinding.inflate(LayoutInflater.from(parent.context),
+            parent, false))
     }
 
     override fun onBindViewHolder(holder: ListViewHolder, position: Int) {
