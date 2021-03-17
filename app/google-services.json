@@ -1,18 +1,27 @@
 {
   "project_info": {
     "project_number": "1027731935363",
+    "firebase_url": "https://listit-83d34-default-rtdb.europe-west1.firebasedatabase.app",
     "project_id": "listit-83d34",
     "storage_bucket": "listit-83d34.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:1027731935363:android:ca1b53914974b50a5acbb6",
+        "mobilesdk_app_id": "1:1027731935363:android:7a4ce703005d7fae5acbb6",
         "android_client_info": {
           "package_name": "com.example.listit"
         }
       },
       "oauth_client": [
+        {
+          "client_id": "1027731935363-244gf5vr4kp2ce5gr5h3uuu5dv00mqia.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.listit",
+            "certificate_hash": "ee4605fec49df46adff191b07e17feac522e682a"
+          }
+        },
         {
           "client_id": "1027731935363-tkec7cq7h5l56nko71tkucrv2qj4gjsb.apps.googleusercontent.com",
           "client_type": 3

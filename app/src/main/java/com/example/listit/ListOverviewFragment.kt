@@ -13,6 +13,8 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.listit.databinding.FragmentListOverviewBinding
 import com.example.listit.data.List
 import com.example.listit.data.ListOverviewRecyclerAdapter
+import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.ktx.Firebase
 import kotlinx.android.synthetic.main.fragment_list_overview.view.*
 
 class ListOverviewFragment : Fragment() {
@@ -23,16 +25,7 @@ class ListOverviewFragment : Fragment() {
 
     private lateinit var listAdapter:ListOverviewRecyclerAdapter
 
-    private var listOverview:MutableList<List> =  mutableListOf(
-        List("Huskeliste", 50),
-        List("Handleliste", 25),
-        List("Pakkeliste", 80),
-        List("Hundeleker", 58),
-        List("Huskeliste", 50),
-        List("Handleliste", 25),
-        List("Pakkeliste", 80),
-        List("Hundeleker", 58)
-    )
+    private var listOverview:MutableList<List> =  mutableListOf()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -71,7 +64,7 @@ class ListOverviewFragment : Fragment() {
                     listAdapter.addList(list)
                     Toast.makeText(activity, "$listTitle was added",Toast.LENGTH_SHORT).show()
                     Log.d(TAG, "User added a new list successfully")
-                } else{
+                } else {
                     Toast.makeText(activity, "Give your list a name :)",Toast.LENGTH_SHORT).show()
                 }
 

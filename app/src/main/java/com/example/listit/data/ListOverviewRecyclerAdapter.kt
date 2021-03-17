@@ -22,6 +22,7 @@ class ListOverviewRecyclerAdapter(private val lists:MutableList<List>) :
 
         init {
             val deleteListButton = binding.root.findViewById<ImageButton>(R.id.deleteListButton)
+
             deleteListButton.setOnClickListener {
                 deleteListDialog()
                 Log.d(TAG, "Delete list button pressed")
