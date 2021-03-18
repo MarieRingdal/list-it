@@ -6,4 +6,5 @@
     <string name="add_list">Add list</string>
     <string name="add_a_new_todo">Add a new to do</string>
     <string name="add_todo">Add</string>
+    <string name="todo_menu_delete">Delete all checked items</string>
 </resources>
