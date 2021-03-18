@@ -15,10 +15,10 @@ class ToDoRecyclerAdapter(private val toDos:MutableList<ToDo>) :
     RecyclerView.Adapter<ToDoRecyclerAdapter.ToDoListViewHolder>(){
 
     class ToDoListViewHolder(val binding: ToDoItemBinding):RecyclerView.ViewHolder(binding.root){
-//        fun bind(toDo: ToDo){
-//            binding.toDoTitle.text = toDo.title
-//            binding.toDoCheckBox.isChecked = toDo.isChecked
-//        }
+        fun bind(toDo: ToDo){
+            binding.toDoTitle.text = toDo.title
+            binding.toDoCheckBox.isChecked = toDo.isChecked
+        }
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ToDoListViewHolder {
@@ -46,9 +46,8 @@ class ToDoRecyclerAdapter(private val toDos:MutableList<ToDo>) :
         }
     }
 
-    private fun addToDo(toDo: ToDo){
-        toDos.add(toDo)
+    fun addToDo(todo: ToDo){
+        toDos.add(todo)
         notifyItemInserted(toDos.size - 1)
     }
-
 }

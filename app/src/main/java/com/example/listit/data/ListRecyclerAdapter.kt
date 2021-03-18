@@ -1,18 +1,17 @@
 package com.example.listit.data
 
 import android.app.AlertDialog
+import android.content.Context
 import android.content.Intent
-import android.text.Layout
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.*
-import androidx.cardview.widget.CardView
-import androidx.fragment.app.FragmentTransaction
 import androidx.recyclerview.widget.RecyclerView
 import com.example.listit.R
-import com.example.listit.ToDoOverviewFragment
+import com.example.listit.ToDoActivity
 import com.example.listit.databinding.ListItemBinding
+import kotlinx.android.synthetic.main.list_item.view.*
 
 class ListRecyclerAdapter(private val lists:MutableList<List>) :
     RecyclerView.Adapter<ListRecyclerAdapter.ListViewHolder>(){
@@ -26,6 +25,16 @@ class ListRecyclerAdapter(private val lists:MutableList<List>) :
         }
 
         init {
+            val listTitle = binding.root.listTitle
+
+            itemView.setOnClickListener {
+                val context = binding.root.context
+                val intent = Intent(context, ToDoActivity::class.java).apply {
+                    putExtra("TITLE", listTitle.text)
+                }
+                context.startActivity(intent)
+            }
+
             val deleteListButton = binding.root.findViewById<ImageButton>(R.id.deleteListButton)
             deleteListButton.setOnClickListener {
                 deleteListDialog()
@@ -54,7 +63,6 @@ class ListRecyclerAdapter(private val lists:MutableList<List>) :
                 create()
                 show()
             }
-
         }
     }
 
@@ -69,10 +77,11 @@ class ListRecyclerAdapter(private val lists:MutableList<List>) :
     override fun onBindViewHolder(holder: ListViewHolder, position: Int) {
         val currentList = lists[position]
         holder.bind(currentList)
+
     }
 
     fun addList(list: List){
         lists.add(list)
         notifyItemInserted(lists.size - 1)
     }
-}
+    }

@@ -5,10 +5,19 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/toDoListContainter"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".ToDoOverviewFragment">
+    android:layout_height="match_parent">
+
+
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toDoToolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/mint"
+        android:minHeight="?attr/actionBarSize"
+        android:theme="?attr/actionBarTheme" />
 
     <!-- Static header -->
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="150dp"
@@ -26,7 +35,7 @@
             android:textStyle="bold" />
 
         <ProgressBar
-            android:id="@+id/progressBar"
+            android:id="@+id/toDoProgressBar"
             style="?android:attr/progressBarStyleHorizontal"
             android:layout_width="250dp"
             android:layout_height="wrap_content"
@@ -45,7 +54,7 @@
         app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior">
 
         <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/toDoItemsRecyclerView"
+            android:id="@+id/toDosRecyclerView"
             android:layout_width="match_parent"
             android:layout_height="300dp"
             android:layout_marginStart="4dp"
@@ -56,12 +65,13 @@
 
     </androidx.core.widget.NestedScrollView>
 
+    <!-- Add a new task layout -->
     <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
         <EditText
-            android:id="@+id/addTodoInput"
+            android:id="@+id/addNewTodoInput"
             android:layout_width="290dp"
             android:layout_height="wrap_content"
             android:layout_gravity="bottom"
