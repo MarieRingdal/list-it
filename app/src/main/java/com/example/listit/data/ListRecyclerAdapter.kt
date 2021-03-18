@@ -13,15 +13,14 @@ import com.example.listit.ToDoActivity
 import com.example.listit.databinding.ListItemBinding
 import kotlinx.android.synthetic.main.list_item.view.*
 
-class ListRecyclerAdapter(private val lists:MutableList<List>) :
+class ListRecyclerAdapter(private val lists:MutableList<ToDoList>) :
     RecyclerView.Adapter<ListRecyclerAdapter.ListViewHolder>(){
 
     private val TAG:String = "listit.ListOverviewRecyclerAdapter.kt"
 
     inner class ListViewHolder(val binding: ListItemBinding):RecyclerView.ViewHolder(binding.root){
-        fun bind(list: List){
+        fun bind(list: ToDoList){
             binding.listTitle.text = list.title
-            binding.listProgression.progress = list.progression
         }
 
         init {
@@ -80,7 +79,7 @@ class ListRecyclerAdapter(private val lists:MutableList<List>) :
 
     }
 
-    fun addList(list: List){
+    fun addList(list: ToDoList){
         lists.add(list)
         notifyItemInserted(lists.size - 1)
     }
