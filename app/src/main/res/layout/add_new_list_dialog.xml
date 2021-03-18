@@ -6,7 +6,7 @@
     android:gravity="center">
 
     <EditText
-        android:id="@+id/newListTitleEditText"
+        android:id="@+id/newListTitleInput"
         android:layout_width="300dp"
         android:layout_height="wrap_content"
         android:hint="@string/add_list"
