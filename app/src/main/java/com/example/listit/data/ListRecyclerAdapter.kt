@@ -1,7 +1,6 @@
 package com.example.listit.data
 
 import android.app.AlertDialog
-import android.content.Context
 import android.content.Intent
 import android.util.Log
 import android.view.LayoutInflater
@@ -9,7 +8,7 @@ import android.view.ViewGroup
 import android.widget.*
 import androidx.recyclerview.widget.RecyclerView
 import com.example.listit.R
-import com.example.listit.ToDoActivity
+import com.example.listit.ToDoListItemActivity
 import com.example.listit.databinding.ListItemBinding
 import kotlinx.android.synthetic.main.list_item.view.*
 
@@ -28,7 +27,7 @@ class ListRecyclerAdapter(private val lists:MutableList<ToDoList>) :
 
             itemView.setOnClickListener {
                 val context = binding.root.context
-                val intent = Intent(context, ToDoActivity::class.java).apply {
+                val intent = Intent(context, ToDoListItemActivity::class.java).apply {
                     putExtra("TITLE", listTitle.text)
                 }
                 context.startActivity(intent)

@@ -8,20 +8,22 @@ import android.widget.EditText
 import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.listit.data.*
-import com.example.listit.databinding.ActivityMainBinding
+import com.example.listit.databinding.ActivityToDoListBinding
 import com.google.android.material.appbar.CollapsingToolbarLayout
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.ktx.Firebase
+import kotlinx.android.synthetic.main.activity_to_do_list.*
 
-class MainActivity : AppCompatActivity() {
+class ToDoListActivity : AppCompatActivity() {
 
-    private var TAG:String = "Mainactivity.kt"
-    private lateinit var binding: ActivityMainBinding
+    private var TAG:String = "ToDoListActivity.kt"
+    private lateinit var binding: ActivityToDoListBinding
     private lateinit var listRecyclerAdapter:ListRecyclerAdapter
     private lateinit var auth:FirebaseAuth
+
     var database = FirebaseDatabase.getInstance().reference
 
     val listOverview:MutableList<ToDoList> =  mutableListOf()
@@ -29,11 +31,10 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        binding = ActivityMainBinding.inflate(layoutInflater)
+        binding = ActivityToDoListBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
         auth = Firebase.auth
-        signInAnonomusly()
 
         binding.listsRecyclerView.layoutManager = LinearLayoutManager(this)
         listRecyclerAdapter = ListRecyclerAdapter(listOverview)
@@ -47,14 +48,6 @@ class MainActivity : AppCompatActivity() {
             addNewList()
         }
 
-    }
-
-    private fun signInAnonomusly(){
-        auth.signInAnonymously().addOnSuccessListener {
-            Log.d(TAG, "Login success ${it.user}")
-        }.addOnFailureListener{
-            Log.e(TAG, "Login failed", it)
-        }
     }
 
     private fun addNewList(){

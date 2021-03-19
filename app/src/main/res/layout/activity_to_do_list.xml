@@ -5,7 +5,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainActivity">
+    tools:context=".ToDoListActivity">
+
 
     <!-- Static Header -->
     <com.google.android.material.appbar.AppBarLayout
@@ -32,20 +33,13 @@
                 android:layout_height="match_parent"
                 android:text="@string/slogan_text"
                 android:textSize="20sp"
-                android:textStyle="italic"
                 android:paddingTop="100dp"
                 android:paddingStart="20dp"
                 android:paddingEnd="50dp"
                 android:fontFamily="sans-serif-black"
                 />
 
-            <androidx.appcompat.widget.Toolbar
-                android:id="@+id/staticHeaderToolbar"
-                android:layout_width="match_parent"
-                android:layout_height="?attr/actionBarSize"
-                app:layout_collapseMode="pin"
-                app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
-                android:background="@color/terracotta" />
+
 
         </com.google.android.material.appbar.CollapsingToolbarLayout>
 
