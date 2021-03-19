@@ -1,11 +1,16 @@
 package com.example.listit
 
 import android.app.AlertDialog
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.view.Menu
+import android.view.MenuItem
 import android.widget.EditText
+import android.widget.Switch
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatDelegate
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.listit.data.*
 import com.example.listit.databinding.ActivityToDoListBinding
@@ -36,6 +41,9 @@ class ToDoListActivity : AppCompatActivity() {
 
         auth = Firebase.auth
 
+
+        setSupportActionBar(toDoListToolbar)
+
         binding.listsRecyclerView.layoutManager = LinearLayoutManager(this)
         listRecyclerAdapter = ListRecyclerAdapter(listOverview)
         binding.listsRecyclerView.adapter = listRecyclerAdapter
@@ -48,6 +56,20 @@ class ToDoListActivity : AppCompatActivity() {
             addNewList()
         }
 
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.todolist_menu, menu)
+        return true
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.itemId){
+            R.id.signOutOption -> {
+                signOutUser()
+            }
+        }
+        return super.onOptionsItemSelected(item)
     }
 
     private fun addNewList(){
@@ -82,5 +104,9 @@ class ToDoListActivity : AppCompatActivity() {
             create()
             show()
         }
+    }
+    private fun signOutUser(){
+        Firebase.auth.signOut()
+        startActivity(Intent(this, LoginActivity::class.java))
     }
 }
