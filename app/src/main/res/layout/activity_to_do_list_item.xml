@@ -10,11 +10,12 @@
 
 
     <androidx.appcompat.widget.Toolbar
-        android:id="@+id/toDoToolbar"
+        android:id="@+id/toDoListItemToolbar"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
         android:background="@color/military"
-        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"/>
+        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+        app:popupTheme="@style/ThemeOverlay.AppCompat.Light"/>
 
     <!-- Static header -->
 

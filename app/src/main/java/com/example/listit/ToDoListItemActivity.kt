@@ -19,6 +19,7 @@ class ToDoListItemActivity : AppCompatActivity() {
     private var TAG:String = "ToDoListItemActivity.kt"
     private lateinit var binding: ActivityToDoListItemBinding
     private lateinit var toDoRecyclerAdapter: ToDoRecyclerAdapter
+
     var database = FirebaseDatabase.getInstance().reference
 
     val toDoOverview:MutableList<ToDoListItem> = mutableListOf()
@@ -33,9 +34,11 @@ class ToDoListItemActivity : AppCompatActivity() {
         toDoRecyclerAdapter = ToDoRecyclerAdapter(toDoOverview)
         binding.toDosRecyclerView.adapter = toDoRecyclerAdapter
 
-        setSupportActionBar(toDoToolbar)
-        supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        supportActionBar?.setDisplayShowHomeEnabled(true)
+        setSupportActionBar(toDoListItemToolbar)
+        supportActionBar?.let { t ->
+            t.setDisplayHomeAsUpEnabled(true)
+            t.setDisplayShowHomeEnabled(true)
+        }
 
         toDoListTitle.text = intent.getStringExtra("TITLE")
 
@@ -58,13 +61,13 @@ class ToDoListItemActivity : AppCompatActivity() {
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
-        menuInflater.inflate(R.menu.todo_menu, menu)
+        menuInflater.inflate(R.menu.todolistitem_menu, menu)
         return true
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId){
-            R.id.todoActionMenu -> {
+            R.id.deleteToDoActionMenu -> {
                 toDoRecyclerAdapter.deleteAllCheckedItems()
             }
         }

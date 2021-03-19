@@ -1,12 +1,11 @@
 <resources>
     <string name="app_name">ListIt</string>
-    <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="adds_new_list">Adds new list</string>
     <string name="slogan_text">Efficiency is key!</string>
     <string name="add_list">Add list</string>
     <string name="add_a_new_todo">Add a new to do</string>
     <string name="add_todo">Add</string>
-    <string name="todo_menu_delete">Delete all checked items</string>
+    <string name="todo_menu_delete">Delete checked items</string>
     <string name="log_in">Log in</string>
     <string name="password">Password</string>
     <string name="e_mail">E-mail</string>
@@ -14,4 +13,11 @@
     <string name="register_account">Register</string>
     <string name="already_a_user">Already a user? Click here</string>
     <string name="confirm_password">Confirm password</string>
+    <string name="sort_by_name">By name</string>
+    <string name="sort_by_progress">By progress</string>
+    <string name="sort_list">Sort list</string>
+    <string name="sign_out">Sign out</string>
+    <string name="sort_to_dos">Sort items</string>
+    <string name="sort_by_checked_status">By checked status</string>
+    <string name="night_mode_switch">Night mode</string>
 </resources>
