@@ -9,15 +9,15 @@ import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.listit.data.ToDoListItem
 import com.example.listit.data.ToDoRecyclerAdapter
-import com.example.listit.databinding.ActivityToDoBinding
+import com.example.listit.databinding.ActivityToDoListItemBinding
 import com.google.firebase.database.FirebaseDatabase
-import kotlinx.android.synthetic.main.activity_to_do.*
+import kotlinx.android.synthetic.main.activity_to_do_list_item.*
 
 
-class ToDoActivity : AppCompatActivity() {
+class ToDoListItemActivity : AppCompatActivity() {
 
-    private var TAG:String = "ToDoActivity.kt"
-    private lateinit var binding: ActivityToDoBinding
+    private var TAG:String = "ToDoListItemActivity.kt"
+    private lateinit var binding: ActivityToDoListItemBinding
     private lateinit var toDoRecyclerAdapter: ToDoRecyclerAdapter
     var database = FirebaseDatabase.getInstance().reference
 
@@ -26,12 +26,16 @@ class ToDoActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        binding = ActivityToDoBinding.inflate(layoutInflater)
+        binding = ActivityToDoListItemBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
         binding.toDosRecyclerView.layoutManager = LinearLayoutManager(this)
         toDoRecyclerAdapter = ToDoRecyclerAdapter(toDoOverview)
         binding.toDosRecyclerView.adapter = toDoRecyclerAdapter
+
+        setSupportActionBar(toDoToolbar)
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        supportActionBar?.setDisplayShowHomeEnabled(true)
 
         toDoListTitle.text = intent.getStringExtra("TITLE")
 
@@ -65,5 +69,10 @@ class ToDoActivity : AppCompatActivity() {
             }
         }
         return super.onOptionsItemSelected(item)
+    }
+
+    override fun onSupportNavigateUp(): Boolean {
+        onBackPressed()
+        return super.onSupportNavigateUp()
     }
 }

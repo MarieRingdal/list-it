@@ -5,16 +5,16 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/toDoListContainter"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    tools:context=".ToDoListItemActivity">
 
 
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toDoToolbar"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/mint"
-        android:minHeight="?attr/actionBarSize"
-        android:theme="?attr/actionBarTheme" />
+        android:layout_height="?attr/actionBarSize"
+        android:background="@color/military"
+        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"/>
 
     <!-- Static header -->
 
@@ -22,6 +22,7 @@
         android:layout_width="match_parent"
         android:layout_height="150dp"
         android:orientation="vertical"
+        android:layout_marginTop="?attr/actionBarSize"
         android:paddingTop="50dp"
         android:background="@color/mint">
 
@@ -49,8 +50,8 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:fillViewport="true"
-        android:layout_marginTop="150dp"
-        android:layout_marginBottom="85dp"
+        android:layout_marginTop="205dp"
+        android:layout_marginBottom="75dp"
         app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior">
 
         <androidx.recyclerview.widget.RecyclerView
