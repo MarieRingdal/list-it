@@ -5,7 +5,7 @@
     <string name="add_list">Add list</string>
     <string name="add_a_new_todo">Add a new to do</string>
     <string name="add_todo">Add</string>
-    <string name="todo_menu_delete">Delete checked items</string>
+    <string name="todo_menu_delete">Delete all items</string>
     <string name="log_in">Log in</string>
     <string name="password">Password</string>
     <string name="e_mail">E-mail</string>
