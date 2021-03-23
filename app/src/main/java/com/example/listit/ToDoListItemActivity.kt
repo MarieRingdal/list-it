@@ -1,6 +1,5 @@
 package com.example.listit
 
-import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
@@ -9,24 +8,22 @@ import android.view.MenuItem
 import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.listit.data.ToDoListItem
-import com.example.listit.data.ToDoRecyclerAdapter
 import com.example.listit.databinding.ActivityToDoListItemBinding
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.database.*
 import kotlinx.android.synthetic.main.activity_to_do_list_item.*
-import kotlinx.android.synthetic.main.list_item.*
 
 class ToDoListItemActivity : AppCompatActivity() {
 
     private var TAG: String = "listit.ToDoListItemActivity.kt"
     private lateinit var binding: ActivityToDoListItemBinding
-    private lateinit var toDoRecyclerAdapter: ToDoRecyclerAdapter
     private lateinit var auth: FirebaseAuth
     private lateinit var user: FirebaseUser
     private lateinit var reference: DatabaseReference
     private var firebaseDatabase = FirebaseDatabase.getInstance().reference
-    val toDoItemOverview: MutableList<ToDoListItem> = mutableListOf()
+
+    private var toDoItemOverview: MutableList<ToDoListItem> = mutableListOf()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -34,19 +31,19 @@ class ToDoListItemActivity : AppCompatActivity() {
         binding = ActivityToDoListItemBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        binding.toDosRecyclerView.layoutManager = LinearLayoutManager(this)
+        binding.toDosRecyclerView.adapter = ToDoRecyclerAdapter(toDoItemOverview, this::onDeleteTodoClicked)
+
         auth = FirebaseAuth.getInstance()
         user = auth.currentUser
 
         val currentListTitle = intent.getStringExtra("TITLE")
 
-        reference = firebaseDatabase.child("/users").child(user.uid)
+        reference = firebaseDatabase.child("/users")
+            .child(user.uid)
             .child("/lists")
             .child(currentListTitle.toString())
             .child("/todos")
-
-        binding.toDosRecyclerView.layoutManager = LinearLayoutManager(this)
-        toDoRecyclerAdapter = ToDoRecyclerAdapter(toDoItemOverview)
-        binding.toDosRecyclerView.adapter = toDoRecyclerAdapter
 
         setSupportActionBar(toDoListItemToolbar)
         supportActionBar?.let { t ->
@@ -70,8 +67,8 @@ class ToDoListItemActivity : AppCompatActivity() {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
-            R.id.deleteToDoActionMenu -> {
-//                toDoRecyclerAdapter.deleteAllCheckedItems()
+            R.id.deleteAllToDosActionMenu -> {
+                reference.removeValue()
             }
         }
         return super.onOptionsItemSelected(item)
@@ -89,14 +86,18 @@ class ToDoListItemActivity : AppCompatActivity() {
 
         when {
             newToDoTitle.isEmpty() -> Toast.makeText(this, "Enter a todo", Toast.LENGTH_SHORT).show()
-            toDoListItemId == null -> Toast.makeText(this, "Id does not exists", Toast.LENGTH_SHORT)
-                .show()
+            toDoListItemId == null -> Toast.makeText(this, "Id does not exists", Toast.LENGTH_SHORT).show()
             else -> {
                 reference.child(newToDoTitle).setValue(toDoListItem)
                 addNewTodoInput.text.clear()
             }
         }
 
+    }
+
+    private fun onDeleteTodoClicked(todo: ToDoListItem){
+        reference.child(todo.title).removeValue()
+        toDosRecyclerView.adapter?.notifyDataSetChanged()
     }
 
     private fun getDataFromFirebase() {
@@ -106,17 +107,15 @@ class ToDoListItemActivity : AppCompatActivity() {
             }
 
             override fun onDataChange(snapshot: DataSnapshot) {
-                val toDoListItems = toDoItemOverview
-                toDoListItems.clear()
+                val todoListItems = toDoItemOverview
+                val adapter = binding.toDosRecyclerView.adapter
+                todoListItems.clear()
                 for (data in snapshot.children) {
                     val toDoListItem = data.getValue(ToDoListItem::class.java)
-                    if (toDoListItem != null) {
-                        toDoListItems.add(toDoListItem)
-                    }
-                }
-                if (toDoListItems.size > 0) {
-                    val adapter = ToDoRecyclerAdapter(toDoListItems)
                     toDosRecyclerView.adapter = adapter
+                    if (toDoListItem != null) {
+                        todoListItems.add(toDoListItem)
+                    }
                 }
             }
         })

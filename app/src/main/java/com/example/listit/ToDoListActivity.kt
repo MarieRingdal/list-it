@@ -19,6 +19,7 @@ import com.google.firebase.auth.ktx.auth
 import com.google.firebase.database.*
 import com.google.firebase.ktx.Firebase
 import kotlinx.android.synthetic.main.activity_to_do_list.*
+import kotlinx.android.synthetic.main.activity_to_do_list_item.*
 
 class ToDoListActivity : AppCompatActivity() {
 
@@ -45,8 +46,7 @@ class ToDoListActivity : AppCompatActivity() {
         setSupportActionBar(toDoListToolbar)
 
         binding.toDoListRecyclerView.layoutManager = LinearLayoutManager(this)
-        listRecyclerAdapter = ListRecyclerAdapter(toDoListOverview)
-        binding.toDoListRecyclerView.adapter = listRecyclerAdapter
+        binding.toDoListRecyclerView.adapter = ListRecyclerAdapter(toDoListOverview, this::onDeleteListClicked)
 
         getDataFromFirebase()
 
@@ -110,6 +110,25 @@ class ToDoListActivity : AppCompatActivity() {
         }
     }
 
+    private fun onDeleteListClicked(list: ToDoList){
+        val alertDialogBuilder = AlertDialog.Builder(binding.root.context)
+
+        with(alertDialogBuilder){
+            setTitle("Delete")
+            setMessage("Are you sure?")
+
+            setPositiveButton("Delete"){dialog, _ ->
+                reference.child(list.title).removeValue()
+                dialog.dismiss()
+            }
+            setNegativeButton("Cancel"){dialog, _ ->
+                dialog.cancel()
+            }
+
+            create()
+            show()
+        }
+    }
 
     private fun signOutUser(){
         Firebase.auth.signOut()
@@ -125,16 +144,14 @@ class ToDoListActivity : AppCompatActivity() {
 
             override fun onDataChange(snapshot: DataSnapshot) {
                 val toDoLists = toDoListOverview
+                val adapter = binding.toDoListRecyclerView.adapter
                 toDoLists.clear()
                 for (data in snapshot.children){
                     val toDoList = data.getValue(ToDoList::class.java)
+                    toDoListRecyclerView.adapter = adapter
                     if (toDoList != null) {
                         toDoLists.add(toDoList)
                     }
-                }
-                if (toDoLists.size > 0){
-                    val adapter = ListRecyclerAdapter(toDoLists)
-                    toDoListRecyclerView.adapter = adapter
                 }
             }
         })
