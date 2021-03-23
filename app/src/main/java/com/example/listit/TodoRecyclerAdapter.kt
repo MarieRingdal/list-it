@@ -3,20 +3,20 @@ package com.example.listit
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.example.listit.data.ToDoListItem
+import com.example.listit.data.TodoListItem
 import com.example.listit.databinding.ToDoItemBinding
 
-class ToDoRecyclerAdapter(private val todos: MutableList<ToDoListItem>,
-                          private val onDeleteTodoClicked:(ToDoListItem) -> Unit) :
-    RecyclerView.Adapter<ToDoRecyclerAdapter.ViewHolder>(){
+class TodoRecyclerAdapter(private val todos: MutableList<TodoListItem>,
+                          private val onDeleteTodoClicked:(TodoListItem) -> Unit) :
+    RecyclerView.Adapter<TodoRecyclerAdapter.ViewHolder>(){
 
     inner class ViewHolder(private val binding: ToDoItemBinding) :
         RecyclerView.ViewHolder(binding.root){
 
-        fun bind(todoList: ToDoListItem, onDeleteTodoClicked: (ToDoListItem) -> Unit){
-            binding.toDoTitle.text = todoList.title
-            binding.toDoCheckBox.isChecked = todoList.isChecked
-            binding.deleteListButton.setOnClickListener { onDeleteTodoClicked(todoList)}
+        fun bind(todoList: TodoListItem, onDeleteTodoClicked: (TodoListItem) -> Unit){
+            binding.todoTitle.text = todoList.title
+            binding.todoCheckBox.isChecked = todoList.isChecked
+            binding.deleteTodoButton.setOnClickListener { onDeleteTodoClicked(todoList)}
         }
     }
 

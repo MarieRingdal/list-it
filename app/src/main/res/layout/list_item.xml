@@ -5,14 +5,14 @@
     android:layout_width="match_parent"
     android:layout_height="100dp"
     android:clickable="true"
-    app:cardBackgroundColor="#F2F2F2F2"
-    app:cardCornerRadius="10dp"
-    app:cardElevation="1dp"
-    app:cardUseCompatPadding="true"
     android:paddingLeft="16dp"
     android:paddingRight="16dp"
     android:paddingTop="8dp"
     android:focusable="true"
+    app:cardBackgroundColor="#F2F2F2F2"
+    app:cardCornerRadius="10dp"
+    app:cardElevation="1dp"
+    app:cardUseCompatPadding="true"
     android:id="@+id/listCardView">
 
     <RelativeLayout

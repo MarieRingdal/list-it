@@ -1,32 +1,30 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="vertical"
     android:layout_marginStart="10dp"
-    android:layout_marginEnd="10dp">
+    android:layout_marginEnd="10dp"
+    android:orientation="vertical">
 
     <CheckBox
-        android:id="@+id/toDoCheckBox"
+        android:id="@+id/todoCheckBox"
         android:layout_width="34dp"
         android:layout_height="47dp"
         android:buttonTint="@color/military" />
 
     <TextView
-        android:id="@+id/toDoTitle"
+        android:id="@+id/todoTitle"
         android:layout_width="300dp"
         android:layout_height="wrap_content"
-        android:fontFamily="sans-serif"
-        android:text="EXAMPLE TEXT"
         android:layout_marginTop="12dp"
         android:layout_marginStart="40dp"
+        android:fontFamily="sans-serif"
+        android:text="EXAMPLE TEXT"
         android:textSize="16sp" />
 
     <ImageButton
-        android:id="@+id/deleteListButton"
+        android:id="@+id/deleteTodoButton"
         android:layout_width="25dp"
         android:layout_height="25dp"
         android:layout_alignParentTop="true"

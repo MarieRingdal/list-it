@@ -7,32 +7,32 @@ import android.view.Menu
 import android.view.MenuItem
 import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.listit.data.ToDoListItem
-import com.example.listit.databinding.ActivityToDoListItemBinding
+import com.example.listit.data.TodoListItem
+import com.example.listit.databinding.ActivityTodoListItemBinding
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.database.*
-import kotlinx.android.synthetic.main.activity_to_do_list_item.*
+import kotlinx.android.synthetic.main.activity_todo_list_item.*
 
-class ToDoListItemActivity : AppCompatActivity() {
+class TodoListItemActivity : AppCompatActivity() {
 
-    private var TAG: String = "listit.ToDoListItemActivity.kt"
-    private lateinit var binding: ActivityToDoListItemBinding
+    private var TAG: String = "listit.TodoListItemActivity.kt"
+    private lateinit var binding: ActivityTodoListItemBinding
     private lateinit var auth: FirebaseAuth
     private lateinit var user: FirebaseUser
     private lateinit var reference: DatabaseReference
     private var firebaseDatabase = FirebaseDatabase.getInstance().reference
 
-    private var toDoItemOverview: MutableList<ToDoListItem> = mutableListOf()
+    private var toDoItemOverview: MutableList<TodoListItem> = mutableListOf()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        binding = ActivityToDoListItemBinding.inflate(layoutInflater)
+        binding = ActivityTodoListItemBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        binding.toDosRecyclerView.layoutManager = LinearLayoutManager(this)
-        binding.toDosRecyclerView.adapter = ToDoRecyclerAdapter(toDoItemOverview, this::onDeleteTodoClicked)
+        binding.todoListItemRecyclerView.layoutManager = LinearLayoutManager(this)
+        binding.todoListItemRecyclerView.adapter = TodoRecyclerAdapter(toDoItemOverview, this::onDeleteTodoClicked)
 
         auth = FirebaseAuth.getInstance()
         user = auth.currentUser
@@ -51,7 +51,7 @@ class ToDoListItemActivity : AppCompatActivity() {
             t.setDisplayShowHomeEnabled(true)
         }
 
-        toDoListTitle.text = intent.getStringExtra("TITLE")
+        todoListTitle.text = intent.getStringExtra("TITLE")
 
         binding.addTodoButton.setOnClickListener {
             addNewToDo()
@@ -67,7 +67,7 @@ class ToDoListItemActivity : AppCompatActivity() {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
-            R.id.deleteAllToDosActionMenu -> {
+            R.id.deleteAllTodosActionMenu -> {
                 reference.removeValue()
             }
         }
@@ -80,24 +80,24 @@ class ToDoListItemActivity : AppCompatActivity() {
     }
 
     private fun addNewToDo() {
-        val toDoListItemId = reference.push().key
-        val newToDoTitle = addNewTodoInput.text.toString().trim()
-        val toDoListItem = ToDoListItem(newToDoTitle, false)
+        val todoListItemId = reference.push().key
+        val newTodoTitle = addNewTodoInput.text.toString().trim()
+        val todoListItem = TodoListItem(newTodoTitle, false)
 
         when {
-            newToDoTitle.isEmpty() -> Toast.makeText(this, "Enter a todo", Toast.LENGTH_SHORT).show()
-            toDoListItemId == null -> Toast.makeText(this, "Id does not exists", Toast.LENGTH_SHORT).show()
+            newTodoTitle.isEmpty() -> Toast.makeText(this, "Enter a todo", Toast.LENGTH_SHORT).show()
+            todoListItemId == null -> Toast.makeText(this, "Id does not exists", Toast.LENGTH_SHORT).show()
             else -> {
-                reference.child(newToDoTitle).setValue(toDoListItem)
+                reference.child(newTodoTitle).setValue(todoListItem)
                 addNewTodoInput.text.clear()
             }
         }
 
     }
 
-    private fun onDeleteTodoClicked(todo: ToDoListItem){
+    private fun onDeleteTodoClicked(todo: TodoListItem){
         reference.child(todo.title).removeValue()
-        toDosRecyclerView.adapter?.notifyDataSetChanged()
+        todoListItemRecyclerView.adapter?.notifyDataSetChanged()
     }
 
     private fun getDataFromFirebase() {
@@ -108,11 +108,11 @@ class ToDoListItemActivity : AppCompatActivity() {
 
             override fun onDataChange(snapshot: DataSnapshot) {
                 val todoListItems = toDoItemOverview
-                val adapter = binding.toDosRecyclerView.adapter
+                val adapter = binding.todoListItemRecyclerView.adapter
                 todoListItems.clear()
                 for (data in snapshot.children) {
-                    val toDoListItem = data.getValue(ToDoListItem::class.java)
-                    toDosRecyclerView.adapter = adapter
+                    val toDoListItem = data.getValue(TodoListItem::class.java)
+                    todoListItemRecyclerView.adapter = adapter
                     if (toDoListItem != null) {
                         todoListItems.add(toDoListItem)
                     }

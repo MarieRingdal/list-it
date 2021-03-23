@@ -17,8 +17,8 @@
             </intent-filter>
         </activity>
         <activity android:name=".RegisterNewUserActivity" />
-        <activity android:name=".ToDoListActivity"/>
-        <activity android:name=".ToDoListItemActivity" />
+        <activity android:name=".TodoListActivity"/>
+        <activity android:name=".TodoListItemActivity" />
     </application>
 
 </manifest>
