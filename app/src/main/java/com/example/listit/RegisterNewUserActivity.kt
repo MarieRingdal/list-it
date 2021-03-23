@@ -6,7 +6,6 @@ import android.os.Bundle
 import android.util.Log
 import android.util.Patterns
 import android.widget.Toast
-import android.widget.Toolbar
 import com.example.listit.databinding.ActivityRegisterAccountBinding
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
@@ -26,11 +25,12 @@ class RegisterNewUserActivity : AppCompatActivity() {
 
         auth = Firebase.auth
 
-        val toolbar = binding.registerUserToolbar
-        setSupportActionBar(toolbar)
-        supportActionBar?.title = ("Register")
-        supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        supportActionBar?.setDisplayShowHomeEnabled(true)
+        setSupportActionBar(registerUserToolbar)
+        supportActionBar?.let { t ->
+            t.title = ("Register")
+            t.setDisplayHomeAsUpEnabled(true)
+            t.setDisplayShowHomeEnabled(true)
+        }
 
         binding.registerNewUserButton.setOnClickListener{
             registerUser()
@@ -62,7 +62,7 @@ class RegisterNewUserActivity : AppCompatActivity() {
             auth.createUserWithEmailAndPassword(newUserEmail, newUserPassword)
                 .addOnCompleteListener(this) { task ->
                     if (task.isSuccessful) {
-                        startActivity(Intent(this, ToDoListActivity::class.java))
+                        startActivity(Intent(this, TodoListActivity::class.java))
                         finish()
                         Log.d(TAG, "createUserWithEmail:success")
                     } else {

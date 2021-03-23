@@ -49,7 +49,7 @@ class LoginActivity : AppCompatActivity() {
                 auth.signInWithEmailAndPassword(userEmail, userPassword)
                     .addOnCompleteListener(this) { task ->
                         if (task.isSuccessful) {
-                            startActivity(Intent(this, ToDoListActivity::class.java))
+                            startActivity(Intent(this, TodoListActivity::class.java))
                             Log.d(TAG, "signInWithEmail:success")
                         } else {
                             Toast.makeText(this, "Login failed", Toast.LENGTH_SHORT).show()

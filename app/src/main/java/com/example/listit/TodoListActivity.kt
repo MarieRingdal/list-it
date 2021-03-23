@@ -10,7 +10,7 @@ import android.widget.EditText
 import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.listit.data.*
-import com.example.listit.databinding.ActivityToDoListBinding
+import com.example.listit.databinding.ActivityTodoListBinding
 import com.google.android.material.appbar.CollapsingToolbarLayout
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.firebase.auth.FirebaseAuth
@@ -18,35 +18,34 @@ import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.database.*
 import com.google.firebase.ktx.Firebase
-import kotlinx.android.synthetic.main.activity_to_do_list.*
-import kotlinx.android.synthetic.main.activity_to_do_list_item.*
+import kotlinx.android.synthetic.main.activity_todo_list.*
 
-class ToDoListActivity : AppCompatActivity() {
+class TodoListActivity : AppCompatActivity() {
 
     private var TAG:String = "listit.ToDoListActivity.kt"
-    private lateinit var binding: ActivityToDoListBinding
+    private lateinit var binding: ActivityTodoListBinding
     private lateinit var listRecyclerAdapter: ListRecyclerAdapter
     private lateinit var auth:FirebaseAuth
     private lateinit var user:FirebaseUser
     private lateinit var reference:DatabaseReference
     private var firebaseDatabase = FirebaseDatabase.getInstance().getReference("/users")
-    private val toDoListOverview:MutableList<ToDoList> =  mutableListOf()
+    private val toDoListOverview:MutableList<TodoList> =  mutableListOf()
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        binding = ActivityToDoListBinding.inflate(layoutInflater)
+        binding = ActivityTodoListBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
         auth = FirebaseAuth.getInstance()
         user = auth.currentUser
         reference = firebaseDatabase.child(user.uid).child("/lists")
 
-        setSupportActionBar(toDoListToolbar)
+        setSupportActionBar(todoListToolbar)
 
-        binding.toDoListRecyclerView.layoutManager = LinearLayoutManager(this)
-        binding.toDoListRecyclerView.adapter = ListRecyclerAdapter(toDoListOverview, this::onDeleteListClicked)
+        binding.todoListRecyclerView.layoutManager = LinearLayoutManager(this)
+        binding.todoListRecyclerView.adapter = ListRecyclerAdapter(toDoListOverview, this::onDeleteListClicked)
 
         getDataFromFirebase()
 
@@ -79,24 +78,24 @@ class ToDoListActivity : AppCompatActivity() {
     private fun addNewListDialog(){
         val alertDialogBuilder = AlertDialog.Builder(this)
         val alertDialogView = layoutInflater.inflate(R.layout.add_new_list_dialog, null)
-        val newToDoListTitle = alertDialogView.findViewById<EditText>(R.id.newListTitleInput)
+        val newTodoListTitle = alertDialogView.findViewById<EditText>(R.id.newListTitleInput)
 
         with(alertDialogBuilder){
             setTitle("Add a new list")
             setView(alertDialogView)
 
             setPositiveButton("Add"){_, _ ->
-                val toDoListTitle = newToDoListTitle.text.toString().trim()
-                val toDoList = ToDoList(toDoListTitle)
-                val toDoListId = reference.push().key
+                val todoListTitle = newTodoListTitle.text.toString().trim()
+                val todoList = TodoList(todoListTitle)
+                val todoListId = reference.push().key
 
                 when {
-                    toDoListTitle.isEmpty() -> Toast.makeText(context, "Give your list a name :)", Toast.LENGTH_SHORT).show()
-                    toDoListOverview.contains(toDoListTitle) -> Toast.makeText(context, "There is already a list with that name", Toast.LENGTH_SHORT).show()
-                    toDoListId == null -> Toast.makeText(context, "Id does not exists", Toast.LENGTH_SHORT).show()
+                    todoListTitle.isEmpty() -> Toast.makeText(context, "Give your list a name :)", Toast.LENGTH_SHORT).show()
+                    toDoListOverview.contains(todoListTitle) -> Toast.makeText(context, "There is already a list with that name", Toast.LENGTH_SHORT).show()
+                    todoListId == null -> Toast.makeText(context, "Id does not exists", Toast.LENGTH_SHORT).show()
                     else -> {
-                        reference.child(toDoListTitle).setValue(toDoList)
-                        Toast.makeText(context, "$toDoListTitle was added", Toast.LENGTH_SHORT).show()
+                        reference.child(todoListTitle).setValue(todoList)
+                        Toast.makeText(context, "$todoListTitle was added", Toast.LENGTH_SHORT).show()
                     }
                 }
             }
@@ -110,7 +109,7 @@ class ToDoListActivity : AppCompatActivity() {
         }
     }
 
-    private fun onDeleteListClicked(list: ToDoList){
+    private fun onDeleteListClicked(list: TodoList){
         val alertDialogBuilder = AlertDialog.Builder(binding.root.context)
 
         with(alertDialogBuilder){
@@ -143,14 +142,14 @@ class ToDoListActivity : AppCompatActivity() {
             }
 
             override fun onDataChange(snapshot: DataSnapshot) {
-                val toDoLists = toDoListOverview
-                val adapter = binding.toDoListRecyclerView.adapter
-                toDoLists.clear()
+                val todoLists = toDoListOverview
+                val adapter = binding.todoListRecyclerView.adapter
+                todoLists.clear()
                 for (data in snapshot.children){
-                    val toDoList = data.getValue(ToDoList::class.java)
-                    toDoListRecyclerView.adapter = adapter
-                    if (toDoList != null) {
-                        toDoLists.add(toDoList)
+                    val todoList = data.getValue(TodoList::class.java)
+                    todoListRecyclerView.adapter = adapter
+                    if (todoList != null) {
+                        todoLists.add(todoList)
                     }
                 }
             }
