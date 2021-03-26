@@ -2,16 +2,18 @@ package com.example.listit
 
 import android.app.AlertDialog
 import android.content.Intent
+import android.graphics.Color
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.view.*
 import android.widget.EditText
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatDelegate
+import androidx.appcompat.widget.SwitchCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.listit.data.*
 import com.example.listit.databinding.ActivityTodoListBinding
-import com.google.android.material.appbar.CollapsingToolbarLayout
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
@@ -24,12 +26,11 @@ class TodoListActivity : AppCompatActivity() {
 
     private var TAG:String = "listit.ToDoListActivity.kt"
     private lateinit var binding: ActivityTodoListBinding
-    private lateinit var listRecyclerAdapter: ListRecyclerAdapter
     private lateinit var auth:FirebaseAuth
     private lateinit var user:FirebaseUser
     private lateinit var reference:DatabaseReference
     private var firebaseDatabase = FirebaseDatabase.getInstance().getReference("/users")
-    private val toDoListOverview:MutableList<TodoList> =  mutableListOf()
+    private val todoListOverview:MutableList<TodoList> =  mutableListOf()
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -45,12 +46,13 @@ class TodoListActivity : AppCompatActivity() {
         setSupportActionBar(todoListToolbar)
 
         binding.todoListRecyclerView.layoutManager = LinearLayoutManager(this)
-        binding.todoListRecyclerView.adapter = ListRecyclerAdapter(toDoListOverview, this::onDeleteListClicked)
+        binding.todoListRecyclerView.adapter = ListRecyclerAdapter(todoListOverview, this::onDeleteListClicked)
 
         getDataFromFirebase()
 
-        val collapsingToolbar: CollapsingToolbarLayout = findViewById(R.id.collapsingToolbar)
         collapsingToolbar.title = "LIST IT"
+        collapsingToolbar.setCollapsedTitleTextColor(Color.WHITE)
+        collapsingToolbar.setExpandedTitleColor(Color.WHITE)
 
         val addNewListButton: FloatingActionButton = findViewById(R.id.addNewListButton)
         addNewListButton.setOnClickListener {
@@ -61,6 +63,15 @@ class TodoListActivity : AppCompatActivity() {
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menuInflater.inflate(R.menu.todolist_menu, menu)
+        val menuItem = menu?.findItem(R.id.dayNightModeSwitch)
+        val themeSwitch:SwitchCompat = menuItem?.actionView as SwitchCompat
+
+        themeSwitch.setOnCheckedChangeListener { _, isChecked ->
+            when (isChecked){
+                true -> AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
+                false -> AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
+            }
+        }
         return true
     }
 
@@ -91,7 +102,7 @@ class TodoListActivity : AppCompatActivity() {
 
                 when {
                     todoListTitle.isEmpty() -> Toast.makeText(context, "Give your list a name :)", Toast.LENGTH_SHORT).show()
-                    toDoListOverview.contains(todoListTitle) -> Toast.makeText(context, "There is already a list with that name", Toast.LENGTH_SHORT).show()
+                    todoListOverview.contains(todoListTitle) -> Toast.makeText(context, "There is already a list with that name", Toast.LENGTH_SHORT).show()
                     todoListId == null -> Toast.makeText(context, "Id does not exists", Toast.LENGTH_SHORT).show()
                     else -> {
                         reference.child(todoListTitle).setValue(todoList)
@@ -134,7 +145,6 @@ class TodoListActivity : AppCompatActivity() {
         startActivity(Intent(this, LoginActivity::class.java))
     }
 
-
     private fun getDataFromFirebase(){
         reference.addValueEventListener(object : ValueEventListener{
             override fun onCancelled(error: DatabaseError) {
@@ -142,7 +152,7 @@ class TodoListActivity : AppCompatActivity() {
             }
 
             override fun onDataChange(snapshot: DataSnapshot) {
-                val todoLists = toDoListOverview
+                val todoLists = todoListOverview
                 val adapter = binding.todoListRecyclerView.adapter
                 todoLists.clear()
                 for (data in snapshot.children){

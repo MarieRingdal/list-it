@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">ListIt</string>
     <string name="adds_new_list">Adds new list</string>
@@ -21,5 +22,4 @@
     <string name="sort_by_checked_status">By checked status</string>
     <string name="night_mode_switch">Night mode</string>
     <string name="switch_theme">Switch theme</string>
-    <string name="theme_switch">Theme switch</string>
 </resources>

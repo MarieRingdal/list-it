@@ -10,17 +10,16 @@
     <!-- Static Header -->
     <com.google.android.material.appbar.AppBarLayout
         android:layout_width="match_parent"
-        android:layout_height="150dp"
+        android:layout_height="180dp"
         android:fitsSystemWindows="true"
-        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
-        android:background="@color/terracotta">
+        android:background="?attr/colorSecondaryVariant">
 
         <com.google.android.material.appbar.CollapsingToolbarLayout
             android:id="@+id/collapsingToolbar"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:fitsSystemWindows="true"
-            app:contentScrim="@color/terracotta"
+            app:contentScrim="?attr/colorSecondaryVariant"
             app:expandedTitleMarginBottom="64dp"
             app:expandedTitleMarginStart="20dp"
             app:layout_scrollFlags="scroll|exitUntilCollapsed"
@@ -31,8 +30,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:text="@string/slogan_text"
+                android:textColor="#F2F2F2"
                 android:textSize="20sp"
-                android:paddingTop="100dp"
+                android:paddingTop="130dp"
                 android:paddingStart="20dp"
                 android:paddingEnd="50dp"
                 android:fontFamily="sans-serif-black" />
@@ -41,9 +41,9 @@
                 android:id="@+id/todoListToolbar"
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
-                android:background="@color/terracotta"
+                android:background="?attr/colorSecondaryVariant"
                 app:layout_collapseMode="pin"
-                app:popupTheme="@style/ThemeOverlay.AppCompat.Light">
+                app:popupTheme="@style/ThemeOverlay.AppCompat.DayNight">
 
             </androidx.appcompat.widget.Toolbar>
 
@@ -85,7 +85,7 @@
             android:layout_gravity="bottom|end"
             android:layout_margin="20dp"
             android:src="@drawable/ic_add"
-            android:backgroundTint="@color/terracotta"
+            android:backgroundTint="?attr/colorSecondaryVariant"
             android:contentDescription="@string/adds_new_list" />
 
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
