@@ -6,6 +6,8 @@
     <color name="easter">#EDCC8B</color>
     <color name="mint">#BDD1C5</color>
     <color name="military">#9DAAA2</color>
-    <color name="black">#FF000000</color>
-    <color name="white">#FFFFFFFF</color>
+    <color name="darkGrey">#616161</color>
+    <color name="lightGrey">#F2F2F2</color>
+    <color name="white">#FFFFFF</color>
+    <color name="black">#000000</color>
 </resources>

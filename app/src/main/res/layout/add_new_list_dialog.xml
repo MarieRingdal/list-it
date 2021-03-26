@@ -10,8 +10,8 @@
         android:layout_width="300dp"
         android:layout_height="wrap_content"
         android:hint="@string/add_list"
-        android:textColorHint="@color/terracotta"
-        android:backgroundTint="@color/burgundy"
+        android:textColorHint="?attr/colorSecondaryVariant"
+        android:backgroundTint="?attr/colorSecondary"
         />
 
 </RelativeLayout>

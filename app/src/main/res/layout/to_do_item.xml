@@ -11,7 +11,7 @@
         android:id="@+id/todoCheckBox"
         android:layout_width="34dp"
         android:layout_height="47dp"
-        android:buttonTint="@color/military" />
+        android:buttonTint="?attr/colorPrimary" />
 
     <TextView
         android:id="@+id/todoTitle"
@@ -31,7 +31,7 @@
         android:layout_alignParentEnd="true"
         android:layout_marginTop="12dp"
         android:background="@color/white"
-        android:tint="@color/military"
+        android:tint="?attr/colorPrimary"
         android:src="@drawable/ic_delete" />
 
 </RelativeLayout>
