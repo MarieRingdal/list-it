@@ -129,6 +129,7 @@ class TodoListActivity : AppCompatActivity() {
 
             setPositiveButton("Delete"){dialog, _ ->
                 reference.child(list.title).removeValue()
+                binding.todoListRecyclerView.adapter?.notifyDataSetChanged()
                 dialog.dismiss()
             }
             setNegativeButton("Cancel"){dialog, _ ->
