@@ -21,6 +21,8 @@ import com.google.firebase.auth.ktx.auth
 import com.google.firebase.database.*
 import com.google.firebase.ktx.Firebase
 import kotlinx.android.synthetic.main.activity_todo_list.*
+import kotlinx.android.synthetic.main.activity_todo_list_item.*
+import kotlinx.android.synthetic.main.list_item.*
 
 class TodoListActivity : AppCompatActivity() {
 
@@ -31,7 +33,6 @@ class TodoListActivity : AppCompatActivity() {
     private lateinit var reference:DatabaseReference
     private var firebaseDatabase = FirebaseDatabase.getInstance().getReference("/users")
     private val todoListOverview:MutableList<TodoList> =  mutableListOf()
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -97,7 +98,7 @@ class TodoListActivity : AppCompatActivity() {
 
             setPositiveButton("Add"){_, _ ->
                 val todoListTitle = newTodoListTitle.text.toString().trim()
-                val todoList = TodoList(todoListTitle)
+                val todoList = TodoList(todoListTitle, 0, 0)
                 val todoListId = reference.push().key
 
                 when {
