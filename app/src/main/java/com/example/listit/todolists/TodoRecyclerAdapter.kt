@@ -1,12 +1,9 @@
-package com.example.listit
+package com.example.listit.todolists
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.example.listit.data.TodoList
-import com.example.listit.data.TodoListItem
 import com.example.listit.databinding.ToDoItemBinding
-import kotlinx.android.synthetic.main.activity_todo_list_item.view.*
 
 class TodoRecyclerAdapter(private val todos: MutableList<TodoListItem>,
                           private val onDeleteTodoClicked:(TodoListItem) -> Unit,

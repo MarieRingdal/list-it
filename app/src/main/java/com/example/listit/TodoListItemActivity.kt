@@ -6,17 +6,16 @@ import android.renderscript.Sampler
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
-import android.widget.ProgressBar
 import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.listit.data.TodoListItem
+import com.example.listit.todolists.TodoListItem
 import com.example.listit.databinding.ActivityTodoListItemBinding
+import com.example.listit.todolists.TodoRecyclerAdapter
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.database.*
-import kotlinx.android.synthetic.main.activity_todo_list.*
+import com.google.firebase.database.core.ValueEventRegistration
 import kotlinx.android.synthetic.main.activity_todo_list_item.*
-import kotlinx.android.synthetic.main.list_item.*
 
 class TodoListItemActivity : AppCompatActivity() {
 
@@ -26,28 +25,38 @@ class TodoListItemActivity : AppCompatActivity() {
     private lateinit var user: FirebaseUser
     private lateinit var reference: DatabaseReference
     private var firebaseDatabase = FirebaseDatabase.getInstance().reference
-    private var toDoItemOverview: MutableList<TodoListItem> = mutableListOf()
+    private var toDoItemOverview: MutableList<TodoListItem> = mutableListOf<TodoListItem>()
+    override fun onBackPressed() {
+        super.onBackPressed()
+        finish()
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
         binding = ActivityTodoListItemBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
         binding.todoListItemRecyclerView.layoutManager = LinearLayoutManager(this)
-        binding.todoListItemRecyclerView.adapter = TodoRecyclerAdapter(toDoItemOverview,
+        binding.todoListItemRecyclerView.adapter = TodoRecyclerAdapter(
+            toDoItemOverview,
             this::onDeleteTodoClicked,
-            this::onCheckboxChecked)
+            this::onCheckboxChecked
+        )
 
         auth = FirebaseAuth.getInstance()
         user = auth.currentUser
 
         val currentListTitle = intent.getStringExtra("TITLE")
+        todoListTitle.text = currentListTitle
+
 
         reference = firebaseDatabase.child("/users")
             .child(user.uid)
             .child("/lists")
             .child(currentListTitle.toString())
+
+        setProgressBar()
+        getDataFromFirebase()
 
         setSupportActionBar(todoListItemToolbar)
         supportActionBar?.let { t ->
@@ -55,13 +64,10 @@ class TodoListItemActivity : AppCompatActivity() {
             t.setDisplayShowHomeEnabled(true)
         }
 
-        todoListTitle.text = currentListTitle
-
         binding.addTodoButton.setOnClickListener {
             addNewToDo()
         }
 
-        getDataFromFirebase()
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -89,8 +95,10 @@ class TodoListItemActivity : AppCompatActivity() {
         val todoListItem = TodoListItem(newTodoTitle, false)
 
         when {
-            newTodoTitle.isEmpty() -> Toast.makeText(this, "Enter a todo", Toast.LENGTH_SHORT).show()
-            todoListItemId == null -> Toast.makeText(this, "Id does not exists", Toast.LENGTH_SHORT).show()
+            newTodoTitle.isEmpty() -> Toast.makeText(this, "Enter a todo", Toast.LENGTH_SHORT)
+                .show()
+            todoListItemId == null -> Toast.makeText(this, "Id does not exists", Toast.LENGTH_SHORT)
+                .show()
             else -> {
                 reference.child("/todos").child(newTodoTitle).setValue(todoListItem)
                 addNewTodoInput.text.clear()
@@ -99,35 +107,45 @@ class TodoListItemActivity : AppCompatActivity() {
 
     }
 
-    private fun onDeleteTodoClicked(todo: TodoListItem){
+    private fun onDeleteTodoClicked(todo: TodoListItem) {
         reference.child("/todos").child(todo.title).removeValue()
         todoListItemRecyclerView.adapter?.notifyDataSetChanged()
     }
 
-    private fun onCheckboxChecked(todo: TodoListItem){
+    private fun onCheckboxChecked(todo: TodoListItem) {
         if (!todo.isDone) {
             reference.child("/todos").child(todo.title).child("done").setValue(true)
+            setProgressBar()
         } else {
             reference.child("/todos").child(todo.title).child("done").setValue(false)
+            setProgressBar()
         }
     }
 
-    private fun setProgressBar(){
-        val itemsInList = todoListItemRecyclerView.adapter?.itemCount!!
-        todoProgressBar.max = itemsInList
-        reference.child("/todos").orderByChild("done").equalTo(true)
-            .addValueEventListener(object: ValueEventListener {
-                override fun onDataChange(snapshot: DataSnapshot) {
-                    val totalOfCheckedItems = snapshot.childrenCount.toInt()
-                    reference.child("checkedItems").setValue(totalOfCheckedItems)
-                    todoProgressBar.progress = totalOfCheckedItems
-                }
-
-                override fun onCancelled(error: DatabaseError) {
-                }
-
-            })
-        reference.child("totalItems").setValue(itemsInList)
+    private fun setProgressBar() {
+        todoProgressBar.max = toDoItemOverview.count()
+        todoProgressBar.progress = toDoItemOverview.count { it.isDone }
+//        reference.child("/todos").orderByChild("done").equalTo(true)
+//            .addValueEventListener(object : ValueEventListener {
+//                override fun onDataChange(snapshot: DataSnapshot) {
+//                    val totalOfCheckedItems = snapshot.childrenCount.toInt()
+//                    reference.child("checkedItems").setValue(totalOfCheckedItems)
+//                    todoProgressBar.progress = totalOfCheckedItems
+//                }
+//
+//                override fun onCancelled(error: DatabaseError) {
+//                }
+//            })
+//
+//        reference.child("/todos").addValueEventListener(object : ValueEventListener {
+//            override fun onDataChange(snapshot: DataSnapshot) {
+//                val count = snapshot.childrenCount.toInt()
+//                reference.child("totalItems").setValue(count)
+//            }
+//
+//            override fun onCancelled(error: DatabaseError) {
+//            }
+//        })
     }
 
     private fun getDataFromFirebase() {
@@ -137,17 +155,14 @@ class TodoListItemActivity : AppCompatActivity() {
             }
 
             override fun onDataChange(snapshot: DataSnapshot) {
-                val todoListItems = toDoItemOverview
-                val adapter = binding.todoListItemRecyclerView.adapter
-                setProgressBar()
-                todoListItems.clear()
+                toDoItemOverview.clear()
                 for (data in snapshot.children) {
-                    val toDoListItem = data.getValue(TodoListItem::class.java)
-                    todoListItemRecyclerView.adapter = adapter
-                    if (toDoListItem != null) {
-                        todoListItems.add(toDoListItem)
+                    val todoListItem = data.getValue(TodoListItem::class.java)
+                    if (todoListItem != null) {
+                        toDoItemOverview.add(todoListItem)
                     }
                 }
+                setProgressBar()
             }
         })
     }

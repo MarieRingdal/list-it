@@ -12,7 +12,7 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.appcompat.widget.SwitchCompat
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.listit.data.*
+import com.example.listit.todolists.*
 import com.example.listit.databinding.ActivityTodoListBinding
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.firebase.auth.FirebaseAuth
@@ -22,7 +22,6 @@ import com.google.firebase.database.*
 import com.google.firebase.ktx.Firebase
 import kotlinx.android.synthetic.main.activity_todo_list.*
 import kotlinx.android.synthetic.main.activity_todo_list_item.*
-import kotlinx.android.synthetic.main.list_item.*
 
 class TodoListActivity : AppCompatActivity() {
 
