@@ -1,15 +1,14 @@
-package com.example.listit
+package com.example.listit.todolists
 
 import android.content.Context
 import android.content.Intent 
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.example.listit.data.TodoList
+import com.example.listit.TodoListItemActivity
 import com.example.listit.databinding.ListItemBinding
-import kotlinx.android.synthetic.main.list_item.view.*
 
-class ListRecyclerAdapter(private val todoLists:MutableList<TodoList>,
+class ListRecyclerAdapter(private var todoLists:MutableList<TodoList>,
                           private val onDeleteListClicked:(TodoList) -> Unit) :
     RecyclerView.Adapter<ListRecyclerAdapter.ListViewHolder>(){
 
@@ -19,12 +18,14 @@ class ListRecyclerAdapter(private val todoLists:MutableList<TodoList>,
 
         fun bind(list: TodoList, onDeleteListClicked:(TodoList) -> Unit){
             binding.listTitle.text = list.title
+            binding.listProgressBar.progress = list.checkedItems
+            binding.listProgressBar.max = list.totalItems
             binding.deleteListButton.setOnClickListener { onDeleteListClicked(list) }
         }
 
         init {
             itemView.setOnClickListener {
-                val listTitle = binding.root.listTitle
+                val listTitle = binding.listTitle
                 val intent = Intent(context, TodoListItemActivity::class.java).apply {
                     putExtra("TITLE", listTitle.text)
                 }
@@ -43,4 +44,6 @@ class ListRecyclerAdapter(private val todoLists:MutableList<TodoList>,
     }
 
     override fun getItemCount(): Int = todoLists.size
+
+
 }

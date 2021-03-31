@@ -33,16 +33,17 @@
             android:textColor="?attr/colorOnSecondary"/>
 
         <ProgressBar
-            android:id="@+id/listProgress"
+            android:id="@+id/listProgressBar"
             style="@style/Widget.AppCompat.ProgressBar.Horizontal"
             android:layout_width="300dp"
-            android:layout_height="wrap_content"
+            android:layout_height="12dp"
             android:layout_alignParentBottom="true"
             android:layout_marginLeft="16dp"
             android:layout_marginRight="16dp"
             android:layout_marginBottom="25dp"
             android:max="100"
-            android:progressBackgroundTint="?attr/colorSecondaryVariant" />
+            android:progressBackgroundTint="?attr/colorSecondaryVariant"
+            android:progressDrawable="@drawable/list_item_progress_bar"/>
 
         <ImageButton
             android:id="@+id/deleteListButton"
@@ -52,7 +53,7 @@
             android:layout_alignParentEnd="true"
             android:layout_marginTop="35dp"
             android:layout_marginEnd="15dp"
-            android:layout_toEndOf="@+id/listProgress"
+            android:layout_toEndOf="@+id/listProgressBar"
             android:background="?attr/colorOnPrimary"
             android:src="@drawable/ic_delete" />
 
