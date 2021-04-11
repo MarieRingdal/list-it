@@ -94,6 +94,11 @@ class TodoListItemActivity : AppCompatActivity() {
                 .show()
             todoListItemId == null -> Toast.makeText(this, "Id does not exists", Toast.LENGTH_SHORT)
                 .show()
+            newTodoTitle.contains(".") -> Toast.makeText(this, "List name can not contain symbols ", Toast.LENGTH_SHORT).show()
+            newTodoTitle.contains("#") -> Toast.makeText(this, "List name can not contain symbols ", Toast.LENGTH_SHORT).show()
+            newTodoTitle.contains("$") -> Toast.makeText(this, "List name can not contain symbols ", Toast.LENGTH_SHORT).show()
+            newTodoTitle.contains("[") -> Toast.makeText(this, "List name can not contain symbols ", Toast.LENGTH_SHORT).show()
+            newTodoTitle.contains("]") -> Toast.makeText(this, "List name can not contain symbols ", Toast.LENGTH_SHORT).show()
             else -> {
                 reference.child("/todos").child(newTodoTitle).setValue(todoListItem)
                 addNewTodoInput.text.clear()
