@@ -25,11 +25,7 @@ class TodoListItemActivity : AppCompatActivity() {
     private lateinit var user: FirebaseUser
     private lateinit var reference: DatabaseReference
     private var firebaseDatabase = FirebaseDatabase.getInstance().reference
-    private var toDoItemOverview: MutableList<TodoListItem> = mutableListOf<TodoListItem>()
-    override fun onBackPressed() {
-        super.onBackPressed()
-        finish()
-    }
+    private var todoItemOverview: MutableList<TodoListItem> = mutableListOf<TodoListItem>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -38,7 +34,7 @@ class TodoListItemActivity : AppCompatActivity() {
 
         binding.todoListItemRecyclerView.layoutManager = LinearLayoutManager(this)
         binding.todoListItemRecyclerView.adapter = TodoRecyclerAdapter(
-            toDoItemOverview,
+            todoItemOverview,
             this::onDeleteTodoClicked,
             this::onCheckboxChecked
         )
@@ -55,7 +51,6 @@ class TodoListItemActivity : AppCompatActivity() {
             .child("/lists")
             .child(currentListTitle.toString())
 
-        setProgressBar()
         getDataFromFirebase()
 
         setSupportActionBar(todoListItemToolbar)
@@ -123,29 +118,28 @@ class TodoListItemActivity : AppCompatActivity() {
     }
 
     private fun setProgressBar() {
-        todoProgressBar.max = toDoItemOverview.count()
-        todoProgressBar.progress = toDoItemOverview.count { it.isDone }
-//        reference.child("/todos").orderByChild("done").equalTo(true)
-//            .addValueEventListener(object : ValueEventListener {
-//                override fun onDataChange(snapshot: DataSnapshot) {
-//                    val totalOfCheckedItems = snapshot.childrenCount.toInt()
-//                    reference.child("checkedItems").setValue(totalOfCheckedItems)
-//                    todoProgressBar.progress = totalOfCheckedItems
-//                }
-//
-//                override fun onCancelled(error: DatabaseError) {
-//                }
-//            })
-//
-//        reference.child("/todos").addValueEventListener(object : ValueEventListener {
-//            override fun onDataChange(snapshot: DataSnapshot) {
-//                val count = snapshot.childrenCount.toInt()
-//                reference.child("totalItems").setValue(count)
-//            }
-//
-//            override fun onCancelled(error: DatabaseError) {
-//            }
-//        })
+        todoProgressBar.max = todoItemOverview.count()
+        reference.child("/todos").orderByChild("done").equalTo(true)
+            .addValueEventListener(object : ValueEventListener {
+                override fun onDataChange(snapshot: DataSnapshot) {
+                    val totalOfCheckedItems = snapshot.childrenCount.toInt()
+                    reference.child("checkedItems").setValue(totalOfCheckedItems)
+                    todoProgressBar.progress = totalOfCheckedItems
+                }
+
+                override fun onCancelled(error: DatabaseError) {
+                }
+            })
+
+        reference.child("/todos").addValueEventListener(object : ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                val count = snapshot.childrenCount.toInt()
+                reference.child("totalItems").setValue(count)
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+            }
+        })
     }
 
     private fun getDataFromFirebase() {
@@ -155,14 +149,16 @@ class TodoListItemActivity : AppCompatActivity() {
             }
 
             override fun onDataChange(snapshot: DataSnapshot) {
-                toDoItemOverview.clear()
+                val adapter = binding.todoListItemRecyclerView.adapter
+                todoItemOverview.clear()
                 for (data in snapshot.children) {
                     val todoListItem = data.getValue(TodoListItem::class.java)
+                    todoListItemRecyclerView.adapter = adapter
                     if (todoListItem != null) {
-                        toDoItemOverview.add(todoListItem)
+                        todoItemOverview.add(todoListItem)
+                        setProgressBar()
                     }
                 }
-                setProgressBar()
             }
         })
     }
