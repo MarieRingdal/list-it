@@ -13,8 +13,11 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.appcompat.widget.SwitchCompat
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.example.listit.todolists.*
 import com.example.listit.databinding.ActivityTodoListBinding
+import com.example.listit.todolists.data.TodoList
+import com.google.android.gms.tasks.Task
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
@@ -22,7 +25,6 @@ import com.google.firebase.auth.ktx.auth
 import com.google.firebase.database.*
 import com.google.firebase.ktx.Firebase
 import kotlinx.android.synthetic.main.activity_todo_list.*
-import kotlinx.android.synthetic.main.activity_todo_list_item.*
 
 class TodoListActivity : AppCompatActivity() {
 
@@ -56,8 +58,6 @@ class TodoListActivity : AppCompatActivity() {
         binding.todoListRecyclerView.layoutManager = LinearLayoutManager(this)
         binding.todoListRecyclerView.adapter = ListRecyclerAdapter(todoListOverview, this::onDeleteListClicked)
 
-        getDataFromFirebase()
-
         collapsingToolbar.title = "LIST IT"
         collapsingToolbar.setCollapsedTitleTextColor(Color.WHITE)
         collapsingToolbar.setExpandedTitleColor(Color.WHITE)
@@ -66,6 +66,11 @@ class TodoListActivity : AppCompatActivity() {
         addNewListButton.setOnClickListener {
             addNewListDialog()
         }
+    }
+
+    override fun onStart() {
+        getDataFromFirebase()
+        super.onStart()
     }
 
 
@@ -133,7 +138,7 @@ class TodoListActivity : AppCompatActivity() {
         }
     }
 
-    private fun onDeleteListClicked(list: TodoList){
+    private fun onDeleteListClicked(list: TodoList, holder: RecyclerView.ViewHolder){
         val alertDialogBuilder = AlertDialog.Builder(binding.root.context)
 
         with(alertDialogBuilder){
@@ -141,8 +146,11 @@ class TodoListActivity : AppCompatActivity() {
             setMessage("Are you sure?")
 
             setPositiveButton("Delete"){dialog, _ ->
-                reference.child(list.title).removeValue()
-                binding.todoListRecyclerView.adapter?.notifyDataSetChanged()
+                reference.child(list.title).removeValue().addOnCompleteListener {
+                    reference.child(list.title).setValue(null)
+                    todoListRecyclerView.adapter?.notifyItemRemoved(holder.adapterPosition)
+                    todoListRecyclerView.adapter?.notifyDataSetChanged()
+                }
                 dialog.dismiss()
             }
             setNegativeButton("Cancel"){dialog, _ ->
@@ -166,14 +174,13 @@ class TodoListActivity : AppCompatActivity() {
             }
 
             override fun onDataChange(snapshot: DataSnapshot) {
-                val todoLists = todoListOverview
                 val adapter = binding.todoListRecyclerView.adapter
-                todoLists.clear()
+                todoListOverview.clear()
                 for (data in snapshot.children){
                     val todoList = data.getValue(TodoList::class.java)
                     todoListRecyclerView.adapter = adapter
                     if (todoList != null) {
-                        todoLists.add(todoList)
+                        todoListOverview.add(todoList)
                     }
                 }
             }

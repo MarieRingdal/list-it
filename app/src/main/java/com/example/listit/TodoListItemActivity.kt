@@ -10,13 +10,12 @@ import android.view.MenuItem
 import android.view.Window
 import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.listit.todolists.TodoListItem
+import com.example.listit.todolists.data.TodoListItem
 import com.example.listit.databinding.ActivityTodoListItemBinding
 import com.example.listit.todolists.TodoRecyclerAdapter
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.database.*
-import com.google.firebase.database.core.ValueEventRegistration
 import kotlinx.android.synthetic.main.activity_todo_list_item.*
 
 class TodoListItemActivity : AppCompatActivity() {
@@ -54,13 +53,10 @@ class TodoListItemActivity : AppCompatActivity() {
         val currentListTitle = intent.getStringExtra("TITLE")
         todoListTitle.text = currentListTitle
 
-
         reference = firebaseDatabase.child("/users")
             .child(user.uid)
             .child("/lists")
             .child(currentListTitle.toString())
-
-        getDataFromFirebase()
 
         setSupportActionBar(todoListItemToolbar)
         supportActionBar?.let { t ->
@@ -72,6 +68,15 @@ class TodoListItemActivity : AppCompatActivity() {
             addNewToDo()
         }
 
+    }
+
+    override fun onStart() {
+        todoProgressBar.progress = 0
+        todoProgressBar.max = 0
+
+        getDataFromFirebase()
+
+        super.onStart()
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -103,11 +108,11 @@ class TodoListItemActivity : AppCompatActivity() {
                 .show()
             todoListItemId == null -> Toast.makeText(this, "Id does not exists", Toast.LENGTH_SHORT)
                 .show()
-            newTodoTitle.contains(".") -> Toast.makeText(this, "List name can not contain symbols ", Toast.LENGTH_SHORT).show()
-            newTodoTitle.contains("#") -> Toast.makeText(this, "List name can not contain symbols ", Toast.LENGTH_SHORT).show()
-            newTodoTitle.contains("$") -> Toast.makeText(this, "List name can not contain symbols ", Toast.LENGTH_SHORT).show()
-            newTodoTitle.contains("[") -> Toast.makeText(this, "List name can not contain symbols ", Toast.LENGTH_SHORT).show()
-            newTodoTitle.contains("]") -> Toast.makeText(this, "List name can not contain symbols ", Toast.LENGTH_SHORT).show()
+            newTodoTitle.contains(".#$[]") -> Toast.makeText(this, "List name can not contain ., #, $ or []", Toast.LENGTH_SHORT).show()
+            newTodoTitle.contains("#") -> Toast.makeText(this, "List name can not contain ., #, $ or []", Toast.LENGTH_SHORT).show()
+            newTodoTitle.contains("$") -> Toast.makeText(this, "List name can not contain ., #, $ or []", Toast.LENGTH_SHORT).show()
+            newTodoTitle.contains("[") -> Toast.makeText(this, "List name can not contain ., #, $ or []", Toast.LENGTH_SHORT).show()
+            newTodoTitle.contains("]") -> Toast.makeText(this, "List name can not contain ., #, $ or []", Toast.LENGTH_SHORT).show()
             else -> {
                 reference.child("/todos").child(newTodoTitle).setValue(todoListItem)
                 addNewTodoInput.text.clear()
@@ -124,14 +129,12 @@ class TodoListItemActivity : AppCompatActivity() {
     private fun onCheckboxChecked(todo: TodoListItem) {
         if (!todo.isDone) {
             reference.child("/todos").child(todo.title).child("done").setValue(true)
-            setProgressBar()
         } else {
             reference.child("/todos").child(todo.title).child("done").setValue(false)
-            setProgressBar()
         }
     }
 
-    private fun setProgressBar() {
+    private fun updateProgressBar() {
         todoProgressBar.max = todoItemOverview.count()
         reference.child("/todos").orderByChild("done").equalTo(true)
             .addValueEventListener(object : ValueEventListener {
@@ -165,12 +168,12 @@ class TodoListItemActivity : AppCompatActivity() {
             override fun onDataChange(snapshot: DataSnapshot) {
                 val adapter = binding.todoListItemRecyclerView.adapter
                 todoItemOverview.clear()
+                todoListItemRecyclerView.adapter = adapter
                 for (data in snapshot.children) {
                     val todoListItem = data.getValue(TodoListItem::class.java)
-                    todoListItemRecyclerView.adapter = adapter
                     if (todoListItem != null) {
                         todoItemOverview.add(todoListItem)
-                        setProgressBar()
+                        updateProgressBar()
                     }
                 }
             }
