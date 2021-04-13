@@ -5,6 +5,7 @@ import android.content.Intent
 import android.graphics.Color
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.transition.Explode
 import android.util.Log
 import android.view.*
 import android.widget.EditText
@@ -37,6 +38,13 @@ class TodoListActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        with(window){
+            requestFeature(Window.FEATURE_CONTENT_TRANSITIONS)
+            enterTransition = Explode()
+            exitTransition = Explode()
+            exitTransition.duration = 2000
+        }
 
         binding = ActivityTodoListBinding.inflate(layoutInflater)
         setContentView(binding.root)

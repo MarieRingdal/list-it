@@ -1,5 +1,6 @@
 package com.example.listit
 
+import android.app.ActivityOptions
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -49,7 +50,8 @@ class LoginActivity : AppCompatActivity() {
                 auth.signInWithEmailAndPassword(userEmail, userPassword)
                     .addOnCompleteListener(this) { task ->
                         if (task.isSuccessful) {
-                            startActivity(Intent(this, TodoListActivity::class.java))
+                            startActivity(Intent(this, TodoListActivity::class.java),
+                                ActivityOptions.makeSceneTransitionAnimation(this).toBundle())
                             Log.d(TAG, "signInWithEmail:success")
                         } else {
                             Toast.makeText(this, "Login failed", Toast.LENGTH_SHORT).show()
