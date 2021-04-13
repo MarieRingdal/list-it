@@ -3,9 +3,11 @@ package com.example.listit
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.renderscript.Sampler
+import android.transition.Explode
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
+import android.view.Window
 import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.listit.todolists.TodoListItem
@@ -29,6 +31,13 @@ class TodoListItemActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        with(window){
+            requestFeature(Window.FEATURE_CONTENT_TRANSITIONS)
+            enterTransition = Explode()
+            exitTransition = Explode()
+        }
+
         binding = ActivityTodoListItemBinding.inflate(layoutInflater)
         setContentView(binding.root)
 

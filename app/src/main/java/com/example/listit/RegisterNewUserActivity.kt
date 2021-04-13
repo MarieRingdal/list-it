@@ -1,10 +1,15 @@
 package com.example.listit
 
+import android.app.ActivityOptions
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.transition.Explode
+import android.transition.Fade
+import android.transition.Slide
 import android.util.Log
 import android.util.Patterns
+import android.view.Window
 import android.widget.Toast
 import com.example.listit.databinding.ActivityRegisterAccountBinding
 import com.google.firebase.auth.FirebaseAuth
@@ -20,6 +25,7 @@ class RegisterNewUserActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
         binding = ActivityRegisterAccountBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
@@ -62,7 +68,8 @@ class RegisterNewUserActivity : AppCompatActivity() {
             auth.createUserWithEmailAndPassword(newUserEmail, newUserPassword)
                 .addOnCompleteListener(this) { task ->
                     if (task.isSuccessful) {
-                        startActivity(Intent(this, TodoListActivity::class.java))
+                        startActivity(Intent(this, TodoListActivity::class.java),
+                            ActivityOptions.makeSceneTransitionAnimation(this).toBundle())
                         finish()
                         Log.d(TAG, "createUserWithEmail:success")
                     } else {
