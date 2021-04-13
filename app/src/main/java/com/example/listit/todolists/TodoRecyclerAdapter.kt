@@ -4,8 +4,9 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.listit.databinding.ToDoItemBinding
+import com.example.listit.todolists.data.TodoListItem
 
-class TodoRecyclerAdapter(private val todos: MutableList<TodoListItem>,
+class TodoRecyclerAdapter(private var todos: MutableList<TodoListItem>,
                           private val onDeleteTodoClicked:(TodoListItem) -> Unit,
                           private val onCheckboxChecked:(TodoListItem) -> Unit) :
     RecyclerView.Adapter<TodoRecyclerAdapter.ViewHolder>(){
