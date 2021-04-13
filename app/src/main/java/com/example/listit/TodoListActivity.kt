@@ -17,7 +17,6 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.listit.todolists.*
 import com.example.listit.databinding.ActivityTodoListBinding
 import com.example.listit.todolists.data.TodoList
-import com.google.android.gms.tasks.Task
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser

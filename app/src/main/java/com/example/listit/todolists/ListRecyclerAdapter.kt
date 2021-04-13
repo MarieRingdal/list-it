@@ -21,7 +21,6 @@ class ListRecyclerAdapter(private var todoLists:MutableList<TodoList>,
             binding.listTitle.text = list.title
             binding.listProgressBar.progress = list.checkedItems
             binding.listProgressBar.max = list.totalItems
-//            binding.deleteListButton.setOnClickListener { onDeleteListClicked(list) }
         }
 
         init {

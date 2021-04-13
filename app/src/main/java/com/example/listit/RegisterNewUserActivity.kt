@@ -4,12 +4,8 @@ import android.app.ActivityOptions
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.transition.Explode
-import android.transition.Fade
-import android.transition.Slide
 import android.util.Log
 import android.util.Patterns
-import android.view.Window
 import android.widget.Toast
 import com.example.listit.databinding.ActivityRegisterAccountBinding
 import com.google.firebase.auth.FirebaseAuth

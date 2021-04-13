@@ -2,7 +2,6 @@ package com.example.listit
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.renderscript.Sampler
 import android.transition.Explode
 import android.util.Log
 import android.view.Menu
