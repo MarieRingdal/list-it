@@ -1,4 +1,4 @@
-package com.example.listit.todolists
+package com.example.listit.todolists.data
 
 data class TodoListItem(val title:String, var isDone:Boolean = false){
     constructor() :
