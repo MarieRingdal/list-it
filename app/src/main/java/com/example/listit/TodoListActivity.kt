@@ -12,6 +12,7 @@ import android.widget.EditText
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.appcompat.widget.SwitchCompat
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.listit.todolists.*
@@ -22,8 +23,10 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.database.*
+import com.google.firebase.database.ktx.getValue
 import com.google.firebase.ktx.Firebase
 import kotlinx.android.synthetic.main.activity_todo_list.*
+import kotlinx.android.synthetic.main.list_item.*
 
 class TodoListActivity : AppCompatActivity() {
 
@@ -55,7 +58,9 @@ class TodoListActivity : AppCompatActivity() {
         setSupportActionBar(todoListToolbar)
 
         binding.todoListRecyclerView.layoutManager = LinearLayoutManager(this)
-        binding.todoListRecyclerView.adapter = ListRecyclerAdapter(todoListOverview, this::onDeleteListClicked)
+        binding.todoListRecyclerView.adapter = ListRecyclerAdapter(todoListOverview,
+            this::onDeleteListClicked,
+            this::onFavoriteClicked)
 
         collapsingToolbar.title = "LIST IT"
         collapsingToolbar.setCollapsedTitleTextColor(Color.WHITE)
@@ -65,6 +70,7 @@ class TodoListActivity : AppCompatActivity() {
         addNewListButton.setOnClickListener {
             addNewListDialog()
         }
+
     }
 
     override fun onStart() {
@@ -160,6 +166,15 @@ class TodoListActivity : AppCompatActivity() {
             show()
         }
     }
+
+    private fun onFavoriteClicked(list: TodoList){
+        if (!list.isFavorite){
+            reference.child(list.title).child("favorite").setValue(true)
+        } else {
+            reference.child(list.title).child("favorite").setValue(false)
+        }
+    }
+
 
     private fun signOutUser(){
         Firebase.auth.signOut()
