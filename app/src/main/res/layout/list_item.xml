@@ -51,12 +51,23 @@
             android:layout_height="25dp"
             android:layout_alignParentTop="true"
             android:layout_alignParentEnd="true"
-            android:layout_marginTop="35dp"
+            android:layout_marginTop="45dp"
             android:layout_marginEnd="15dp"
             android:layout_toEndOf="@+id/listProgressBar"
-            android:background="?attr/colorOnPrimary"
+            android:background="@android:color/transparent"
             android:src="@drawable/ic_delete" />
 
+        <ImageButton
+            android:id="@+id/favoriteListButton"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentEnd ="true"
+            android:layout_marginTop="15dp"
+            android:layout_marginEnd="15dp"
+            android:layout_toEndOf="@id/listProgressBar"
+            android:background="@android:color/transparent"
+            android:src="@drawable/ic_favorite_false"/>
 
     </RelativeLayout>
 

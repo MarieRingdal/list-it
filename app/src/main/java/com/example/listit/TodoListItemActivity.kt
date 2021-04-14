@@ -7,6 +7,7 @@ import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.Window
+import android.widget.ImageButton
 import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.listit.todolists.data.TodoListItem
@@ -26,6 +27,9 @@ class TodoListItemActivity : AppCompatActivity() {
     private lateinit var reference: DatabaseReference
     private var firebaseDatabase = FirebaseDatabase.getInstance().reference
     private var todoItemOverview: MutableList<TodoListItem> = mutableListOf<TodoListItem>()
+    private lateinit var dataEventListener: ValueEventListener
+    private lateinit var isCheckedEventListener: ValueEventListener
+    private lateinit var countEventListener: ValueEventListener
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -94,6 +98,9 @@ class TodoListItemActivity : AppCompatActivity() {
 
     override fun onSupportNavigateUp(): Boolean {
         onBackPressed()
+        reference.removeEventListener(dataEventListener)
+        reference.removeEventListener(countEventListener)
+        reference.removeEventListener(isCheckedEventListener)
         return super.onSupportNavigateUp()
     }
 
@@ -107,7 +114,8 @@ class TodoListItemActivity : AppCompatActivity() {
                 .show()
             todoListItemId == null -> Toast.makeText(this, "Id does not exists", Toast.LENGTH_SHORT)
                 .show()
-            newTodoTitle.contains(".#$[]") -> Toast.makeText(this, "List name can not contain ., #, $ or []", Toast.LENGTH_SHORT).show()
+//            newTodoTitle.contains(".#$[]") -> Toast.makeText(this, "List name can not contain ., #, $ or []", Toast.LENGTH_SHORT).show()
+            newTodoTitle.contains(".") -> Toast.makeText(this, "List name can not contain ., #, $ or []", Toast.LENGTH_SHORT).show()
             newTodoTitle.contains("#") -> Toast.makeText(this, "List name can not contain ., #, $ or []", Toast.LENGTH_SHORT).show()
             newTodoTitle.contains("$") -> Toast.makeText(this, "List name can not contain ., #, $ or []", Toast.LENGTH_SHORT).show()
             newTodoTitle.contains("[") -> Toast.makeText(this, "List name can not contain ., #, $ or []", Toast.LENGTH_SHORT).show()
@@ -128,14 +136,16 @@ class TodoListItemActivity : AppCompatActivity() {
     private fun onCheckboxChecked(todo: TodoListItem) {
         if (!todo.isDone) {
             reference.child("/todos").child(todo.title).child("done").setValue(true)
+//            favoriteListButton.setImageResource(R.drawable.ic_favorite_true)
         } else {
             reference.child("/todos").child(todo.title).child("done").setValue(false)
+//            favoriteListButton.setImageResource(R.drawable.ic_favorite_false)
         }
     }
 
     private fun updateProgressBar() {
         todoProgressBar.max = todoItemOverview.count()
-        reference.child("/todos").orderByChild("done").equalTo(true)
+        isCheckedEventListener = reference.child("/todos").orderByChild("done").equalTo(true)
             .addValueEventListener(object : ValueEventListener {
                 override fun onDataChange(snapshot: DataSnapshot) {
                     val totalOfCheckedItems = snapshot.childrenCount.toInt()
@@ -147,7 +157,7 @@ class TodoListItemActivity : AppCompatActivity() {
                 }
             })
 
-        reference.child("/todos").addValueEventListener(object : ValueEventListener {
+        countEventListener = reference.child("/todos").addValueEventListener(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
                 val count = snapshot.childrenCount.toInt()
                 reference.child("totalItems").setValue(count)
@@ -159,7 +169,7 @@ class TodoListItemActivity : AppCompatActivity() {
     }
 
     private fun getDataFromFirebase() {
-        reference.child("/todos").addValueEventListener(object : ValueEventListener {
+        dataEventListener = reference.child("/todos").addValueEventListener(object : ValueEventListener {
             override fun onCancelled(error: DatabaseError) {
                 Log.w(TAG, "loadPost:onCancelled", error.toException())
             }
