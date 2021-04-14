@@ -122,11 +122,7 @@ class TodoListActivity : AppCompatActivity() {
                     todoListTitle.isEmpty() -> Toast.makeText(context, "Give your list a name :)", Toast.LENGTH_SHORT).show()
                     todoListOverview.contains(todoListTitle) -> Toast.makeText(context, "There is already a list with that name", Toast.LENGTH_SHORT).show()
                     todoListId == null -> Toast.makeText(context, "Id does not exists", Toast.LENGTH_SHORT).show()
-                    todoListTitle.contains(".") -> Toast.makeText(context, "List name can not contain symbols ", Toast.LENGTH_SHORT).show()
-                    todoListTitle.contains("#") -> Toast.makeText(context, "List name can not contain symbols ", Toast.LENGTH_SHORT).show()
-                    todoListTitle.contains("$") -> Toast.makeText(context, "List name can not contain symbols ", Toast.LENGTH_SHORT).show()
-                    todoListTitle.contains("[") -> Toast.makeText(context, "List name can not contain symbols ", Toast.LENGTH_SHORT).show()
-                    todoListTitle.contains("]") -> Toast.makeText(context, "List name can not contain symbols ", Toast.LENGTH_SHORT).show()
+                    todoListTitle.contains("\\W".toRegex()) -> Toast.makeText(context, "List name can not contain symbols ", Toast.LENGTH_SHORT).show()
                     else -> {
                         reference.child(todoListTitle).setValue(todoList)
                         Toast.makeText(context, "$todoListTitle was added", Toast.LENGTH_SHORT).show()
