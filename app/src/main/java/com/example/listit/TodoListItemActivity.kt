@@ -7,7 +7,6 @@ import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.Window
-import android.widget.ImageButton
 import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.listit.todolists.data.TodoListItem
@@ -74,11 +73,7 @@ class TodoListItemActivity : AppCompatActivity() {
     }
 
     override fun onStart() {
-        todoProgressBar.progress = 0
-        todoProgressBar.max = 0
-
         getDataFromFirebase()
-
         super.onStart()
     }
 
@@ -114,12 +109,7 @@ class TodoListItemActivity : AppCompatActivity() {
                 .show()
             todoListItemId == null -> Toast.makeText(this, "Id does not exists", Toast.LENGTH_SHORT)
                 .show()
-//            newTodoTitle.contains(".#$[]") -> Toast.makeText(this, "List name can not contain ., #, $ or []", Toast.LENGTH_SHORT).show()
-            newTodoTitle.contains(".") -> Toast.makeText(this, "List name can not contain ., #, $ or []", Toast.LENGTH_SHORT).show()
-            newTodoTitle.contains("#") -> Toast.makeText(this, "List name can not contain ., #, $ or []", Toast.LENGTH_SHORT).show()
-            newTodoTitle.contains("$") -> Toast.makeText(this, "List name can not contain ., #, $ or []", Toast.LENGTH_SHORT).show()
-            newTodoTitle.contains("[") -> Toast.makeText(this, "List name can not contain ., #, $ or []", Toast.LENGTH_SHORT).show()
-            newTodoTitle.contains("]") -> Toast.makeText(this, "List name can not contain ., #, $ or []", Toast.LENGTH_SHORT).show()
+            newTodoTitle.contains("\\W".toRegex()) -> Toast.makeText(this, "List name can not contain symbols", Toast.LENGTH_SHORT).show()
             else -> {
                 reference.child("/todos").child(newTodoTitle).setValue(todoListItem)
                 addNewTodoInput.text.clear()
@@ -136,28 +126,31 @@ class TodoListItemActivity : AppCompatActivity() {
     private fun onCheckboxChecked(todo: TodoListItem) {
         if (!todo.isDone) {
             reference.child("/todos").child(todo.title).child("done").setValue(true)
-//            favoriteListButton.setImageResource(R.drawable.ic_favorite_true)
         } else {
             reference.child("/todos").child(todo.title).child("done").setValue(false)
-//            favoriteListButton.setImageResource(R.drawable.ic_favorite_false)
         }
     }
 
     private fun updateProgressBar() {
         todoProgressBar.max = todoItemOverview.count()
+        todoProgressBar.progress = 0
         isCheckedEventListener = reference.child("/todos").orderByChild("done").equalTo(true)
             .addValueEventListener(object : ValueEventListener {
                 override fun onDataChange(snapshot: DataSnapshot) {
+                    if (snapshot.value != null) {
                     val totalOfCheckedItems = snapshot.childrenCount.toInt()
                     reference.child("checkedItems").setValue(totalOfCheckedItems)
                     todoProgressBar.progress = totalOfCheckedItems
+                    } else{
+                        todoProgressBar.progress = 0
+                    }
                 }
 
                 override fun onCancelled(error: DatabaseError) {
                 }
             })
 
-        countEventListener = reference.child("/todos").addValueEventListener(object : ValueEventListener {
+         countEventListener = reference.child("/todos").addValueEventListener(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
                 val count = snapshot.childrenCount.toInt()
                 reference.child("totalItems").setValue(count)
@@ -182,9 +175,10 @@ class TodoListItemActivity : AppCompatActivity() {
                     val todoListItem = data.getValue(TodoListItem::class.java)
                     if (todoListItem != null) {
                         todoItemOverview.add(todoListItem)
-                        updateProgressBar()
+
                     }
                 }
+                updateProgressBar()
             }
         })
     }

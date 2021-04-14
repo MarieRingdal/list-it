@@ -5,6 +5,7 @@ import android.content.Intent
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.example.listit.R
 import com.example.listit.TodoListItemActivity
 import com.example.listit.databinding.ListItemBinding
 import com.example.listit.todolists.data.TodoList
@@ -27,6 +28,9 @@ class ListRecyclerAdapter(private var todoLists:MutableList<TodoList>,
             binding.listProgressBar.progress = list.checkedItems
             binding.listProgressBar.max = list.totalItems
             binding.favoriteListButton.setOnClickListener { onFavoriteClicked(list) }
+            if (list.isFavorite){
+                binding.favoriteListButton.setImageResource(R.drawable.ic_favorite_true)
+            }
         }
 
         init {
